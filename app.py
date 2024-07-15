@@ -1,31 +1,20 @@
-import json
-
-TODO_FILE = 'todos.json'
-
 def load_todos():
     try:
         with open(TODO_FILE, 'r') as file:
             return json.load(file)
     except FileNotFoundError:
         return []
-
-def save_todos(todos):
-    with open(TODO_FILE, 'w') as file:
-        json.dump(todos, file)
-
+def list_todos():
+    todos = load_todos()
+    for index, todo in enumerate(todos):
+        status = "Done" if todo["done"] else "Not done"
+        print(f"{index + 1}. {todo['task']} - {status}")
 def add_todo():
     todos = load_todos()
     task = input("Enter a new task: ")
     todos.append({"task": task, "done": False})
     save_todos(todos)
     print("Task added!")
-
-def list_todos():
-    todos = load_todos()
-    for index, todo in enumerate(todos):
-        status = "Done" if todo["done"] else "Not done"
-        print(f"{index + 1}. {todo['task']} - {status}")
-
 def mark_done():
     todos = load_todos()
     list_todos()
@@ -36,7 +25,9 @@ def mark_done():
         print("Task marked as done!")
     else:
         print("Invalid task number.")
-
+def save_todos(todos):
+    with open(TODO_FILE, 'w') as file:
+        json.dump(todos, file)
 def main():
     while True:
         print("\n1. Add Task")
@@ -54,6 +45,3 @@ def main():
             break
         else:
             print("Invalid choice. Please try again.")
-
-if __name__ == '__main__':
-    main()
